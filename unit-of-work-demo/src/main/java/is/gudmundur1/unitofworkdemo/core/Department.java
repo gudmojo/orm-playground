@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.core;
 
 import java.util.List;
 
@@ -46,5 +46,9 @@ public class Department extends DomainObject {
 
     public List<Employee> getEmployeeList() {
         return employeeList;
+    }
+
+    public void delete() {
+        markRemoved();
     }
 }

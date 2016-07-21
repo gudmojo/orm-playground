@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.core;
 
 import com.google.common.base.Preconditions;
 

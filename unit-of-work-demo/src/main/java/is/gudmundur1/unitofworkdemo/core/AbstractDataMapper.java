@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.core;
 
 public abstract class AbstractDataMapper<T extends DomainObject> {
     public abstract void insert(T obj);

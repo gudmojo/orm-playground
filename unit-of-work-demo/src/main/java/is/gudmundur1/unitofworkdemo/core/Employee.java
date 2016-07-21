@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.core;
 
 public class Employee extends DomainObject {
 
@@ -45,5 +45,9 @@ public class Employee extends DomainObject {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public void delete() {
+        markRemoved();
     }
 }

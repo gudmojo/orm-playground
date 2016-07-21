@@ -1,5 +1,8 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.postgres;
 
+import is.gudmundur1.unitofworkdemo.core.Department;
+import is.gudmundur1.unitofworkdemo.core.DepartmentRepo;
+import is.gudmundur1.unitofworkdemo.core.Employee;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -10,14 +13,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class DepartmentRepo {
+public class SqlDepartmentRepo implements DepartmentRepo {
 
     private DbClient dbClient;
 
-    public DepartmentRepo(DbClient dbClient) {
+    public SqlDepartmentRepo(DbClient dbClient) {
         this.dbClient = dbClient;
     }
 
+    @Override
     public Optional<Department> findById(long id, boolean loadChildren) {
         try {
             String sql = "select id, name from departments where id = ?";
@@ -45,6 +49,7 @@ public class DepartmentRepo {
         department.setEmployeeList(employees);
     }
 
+    @Override
     public Optional<Department> findByName(String name) {
         try {
             String sql = "select id, name from departments where name = ?";

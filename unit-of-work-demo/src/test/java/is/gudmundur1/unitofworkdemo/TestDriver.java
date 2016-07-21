@@ -1,5 +1,10 @@
 package is.gudmundur1.unitofworkdemo;
 
+import is.gudmundur1.unitofworkdemo.core.*;
+import is.gudmundur1.unitofworkdemo.postgres.DbClient;
+import is.gudmundur1.unitofworkdemo.postgres.SqlDepartmentRepo;
+import is.gudmundur1.unitofworkdemo.postgres.SqlEmployeeRepo;
+
 import java.util.Optional;
 
 public class TestDriver {
@@ -7,14 +12,14 @@ public class TestDriver {
     public static final String SALES_NAME = "Sales";
     public static final String SALES_NAME_2 = "Sales2";
 
-    DbClient dbClient;
-    DepartmentRepo departmentRepo;
-    EmployeeRepo employeeRepo;
+    private DbClient dbClient;
+    private DepartmentRepo departmentRepo;
+    private EmployeeRepo employeeRepo;
 
     public TestDriver() {
         this.dbClient = new DbClient();
-        this.departmentRepo = new DepartmentRepo(dbClient);
-        this.employeeRepo = new EmployeeRepo(dbClient);
+        this.departmentRepo = new SqlDepartmentRepo(dbClient);
+        this.employeeRepo = new SqlEmployeeRepo(dbClient);
     }
 
     public void createDepartment(long id) {
@@ -42,7 +47,7 @@ public class TestDriver {
     public void deleteDepartment(long id) {
         UnitOfWork.newCurrent();
         Department department = departmentRepo.findById(id, false).orElse(null);
-        department.markRemoved();
+        department.delete();
 
         UnitOfWork.getCurrent().commit();
     }
@@ -55,7 +60,7 @@ public class TestDriver {
         UnitOfWork.newCurrent();
         Department department = departmentRepo.findById(id, false).orElse(null);
         if (department != null) {
-            department.markRemoved();
+            department.delete();
         }
         UnitOfWork.getCurrent().commit();
     }
@@ -64,7 +69,7 @@ public class TestDriver {
         UnitOfWork.newCurrent();
         Employee employee = employeeRepo.findById(id).orElse(null);
         if (employee != null) {
-            employee.markRemoved();
+            employee.delete();
         }
         UnitOfWork.getCurrent().commit();
     }

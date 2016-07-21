@@ -1,5 +1,6 @@
 package is.gudmundur1.unitofworkdemo;
 
+
 /**
  * Hello world!
  *
@@ -7,7 +8,6 @@ package is.gudmundur1.unitofworkdemo;
 public class App {
 
     public static void main(String[] args) {
-
         System.out.println("Hello World!");
     }
 }

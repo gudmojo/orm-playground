@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.core;
 
 public abstract class DomainObject {
 

@@ -1,5 +1,11 @@
 package is.gudmundur1.unitofworkdemo;
 
+import is.gudmundur1.unitofworkdemo.core.Department;
+import is.gudmundur1.unitofworkdemo.core.Employee;
+import is.gudmundur1.unitofworkdemo.core.MapperRegistry;
+import is.gudmundur1.unitofworkdemo.postgres.DbClient;
+import is.gudmundur1.unitofworkdemo.postgres.DepartmentDataMapper;
+import is.gudmundur1.unitofworkdemo.postgres.EmployeeDataMapper;
 import org.flywaydb.core.Flyway;
 import org.junit.Test;
 
@@ -13,6 +19,12 @@ import static org.hamcrest.CoreMatchers.is;
 public class AppTest {
 
     private TestDriver testDriver = new TestDriver();
+
+    public AppTest() {
+        DbClient dbClient = new DbClient();
+        MapperRegistry.put(Department.class, new DepartmentDataMapper(dbClient));
+        MapperRegistry.put(Employee.class, new EmployeeDataMapper(dbClient));
+    }
 
     @Test
     public void createDbSchema() {

@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo;
+package is.gudmundur1.unitofworkdemo.postgres;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
