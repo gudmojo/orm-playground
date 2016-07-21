@@ -1,8 +1,5 @@
 package is.gudmundur1.unitofworkdemo;
 
-/**
- * Created by gudmundur on 21.7.2016.
- */
 public abstract class DomainObject {
 
     protected void markNew() {

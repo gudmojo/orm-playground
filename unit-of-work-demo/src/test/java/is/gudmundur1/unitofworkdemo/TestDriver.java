@@ -1,14 +1,23 @@
 package is.gudmundur1.unitofworkdemo;
 
+import java.util.Optional;
+
 /**
  * Created by gudmundur on 21.7.2016.
  */
 public class TestDriver {
-    public void createRecipe() {
+
+    DepartmentRepo departmentRepo = new DepartmentRepo(new DbClient());
+
+    public void createDepartment() {
         UnitOfWork.newCurrent();
-        Recipe recipe = Recipe.create(1L, "Ham & cheese sandwitch");
-        // todo: add ingredients to recipe
+        Department department = Department.create(1L, "Sales");
+        // todo: add employees to department
 
         UnitOfWork.getCurrent().commit();
+    }
+
+    public Optional<Department> findByName(String name) {
+        return departmentRepo.findByName(name);
     }
 }
