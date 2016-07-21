@@ -3,7 +3,6 @@ package is.gudmundur1.unitofworkdemo;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class UnitOfWork {

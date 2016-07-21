@@ -1,9 +1,12 @@
 package is.gudmundur1.unitofworkdemo;
 
+import java.util.List;
+
 public class Department extends DomainObject {
 
     private Long id;
     private String name;
+    private List<Employee> employeeList;
 
     public Department() {
     }
@@ -35,5 +38,13 @@ public class Department extends DomainObject {
     public void setName(String name) {
         this.name = name;
         markDirty();
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+
+    public List<Employee> getEmployeeList() {
+        return employeeList;
     }
 }

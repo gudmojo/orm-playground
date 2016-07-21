@@ -5,21 +5,22 @@ import is.gudmundur1.unitofworkdemo.postgres.SqlParams;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-public class DepartmentDataMapper extends AbstractDataMapper<Department> {
+public class EmployeeDataMapper extends AbstractDataMapper<Employee> {
 
     private DbClient dbClient;
 
-    public DepartmentDataMapper(DbClient dbClient) {
+    public EmployeeDataMapper(DbClient dbClient) {
         this.dbClient = dbClient;
     }
 
     @Override
-    public void insert(Department department) {
-        String sql = "insert into departments(id, name) values (?, ?)";
+    public void insert(Employee employee) {
+        String sql = "insert into employees(id, department_id, name) values (?, ?, ?)";
         try {
             SqlParams sqlParams = new SqlParams();
-            sqlParams.addLong(department.getId());
-            sqlParams.addString(department.getName());
+            sqlParams.addLong(employee.getId());
+            sqlParams.addLong(employee.getDepartmentId());
+            sqlParams.addString(employee.getName());
             CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();
@@ -29,12 +30,13 @@ public class DepartmentDataMapper extends AbstractDataMapper<Department> {
     }
 
     @Override
-    public void update(Department department) {
-        String sql = "update departments set name = ? where id = ?";
+    public void update(Employee employee) {
+        String sql = "update employees set name = ?, department_id = ? where id = ?";
         try {
             SqlParams sqlParams = new SqlParams();
-            sqlParams.addString(department.getName());
-            sqlParams.addLong(department.getId());
+            sqlParams.addString(employee.getName());
+            sqlParams.addLong(employee.getDepartmentId());
+            sqlParams.addLong(employee.getId());
             CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();
@@ -44,11 +46,11 @@ public class DepartmentDataMapper extends AbstractDataMapper<Department> {
     }
 
     @Override
-    public void delete(Department department) {
-        String sql = "delete from departments where id = ?";
+    public void delete(Employee employee) {
+        String sql = "delete from employees where id = ?";
         try {
             SqlParams sqlParams = new SqlParams();
-            sqlParams.addLong(department.getId());
+            sqlParams.addLong(employee.getId());
             CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();

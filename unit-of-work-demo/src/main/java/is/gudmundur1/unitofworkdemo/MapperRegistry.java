@@ -11,6 +11,7 @@ public class MapperRegistry {
         DbClient dbClient = new DbClient();
         map = new HashMap<>(2);
         map.put(Department.class, new DepartmentDataMapper(dbClient));
+        map.put(Employee.class, new EmployeeDataMapper(dbClient));
     }
 
     public static AbstractDataMapper getMapper(Class<? extends DomainObject> clazz) {
