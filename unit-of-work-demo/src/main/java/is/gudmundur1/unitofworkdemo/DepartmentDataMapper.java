@@ -32,7 +32,17 @@ public class DepartmentDataMapper extends AbstractDataMapper {
     @Override
     public void update(DomainObject obj) {
         Department department = (Department) obj;
-        throw new RuntimeException("not implemented");
+        String sql = "update departments set name = ? where id = ?";
+        try {
+            SqlParams sqlParams = new SqlParams();
+            sqlParams.addString(department.getName());
+            sqlParams.addLong(department.getId());
+            CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
+            sqlParams.fill(callableStatement);
+            callableStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

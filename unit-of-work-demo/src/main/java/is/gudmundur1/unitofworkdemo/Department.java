@@ -34,5 +34,6 @@ public class Department extends DomainObject {
 
     public void setName(String name) {
         this.name = name;
+        markDirty();
     }
 }

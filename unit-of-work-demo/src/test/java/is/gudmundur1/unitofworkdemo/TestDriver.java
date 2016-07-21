@@ -15,10 +15,18 @@ public class TestDriver {
         this.departmentRepo = new DepartmentRepo(dbClient);
     }
 
-    public void createDepartment() {
+    public void createDepartment(long id) {
         UnitOfWork.newCurrent();
-        Department department = Department.create(1L, "Sales");
+        Department department = Department.create(id, "Sales");
         // todo: add employees to department
+
+        UnitOfWork.getCurrent().commit();
+    }
+
+    public void updateDepartment(long id) {
+        UnitOfWork.newCurrent();
+        Department department = departmentRepo.findById(id).orElse(null);
+        department.setName("Sales2");
 
         UnitOfWork.getCurrent().commit();
     }
@@ -34,5 +42,9 @@ public class TestDriver {
             department.markRemoved();
         }
         UnitOfWork.getCurrent().commit();
+    }
+
+    public DepartmentRepo getDepartmentRepo() {
+        return departmentRepo;
     }
 }
