@@ -15,6 +15,18 @@ public class DepartmentRepo {
         this.dbClient = dbClient;
     }
 
+    public Optional<Department> findById(long id) {
+        try {
+            String sql = "select id, name from departments where id = ?";
+            ResultSetHandler<Department> handler = new BeanHandler<>(Department.class);
+            QueryRunner queryRunner = new QueryRunner();
+            Department result = queryRunner.query(dbClient.getConnection(), sql, handler, id);
+            return Optional.ofNullable(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Optional<Department> findByName(String name) {
         try {
             String sql = "select id, name from departments where name = ?";

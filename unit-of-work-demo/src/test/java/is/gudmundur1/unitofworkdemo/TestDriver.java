@@ -7,7 +7,13 @@ import java.util.Optional;
  */
 public class TestDriver {
 
-    DepartmentRepo departmentRepo = new DepartmentRepo(new DbClient());
+    DbClient dbClient;
+    DepartmentRepo departmentRepo;
+
+    public TestDriver() {
+        this.dbClient = new DbClient();
+        this.departmentRepo = new DepartmentRepo(dbClient);
+    }
 
     public void createDepartment() {
         UnitOfWork.newCurrent();
@@ -19,5 +25,14 @@ public class TestDriver {
 
     public Optional<Department> findByName(String name) {
         return departmentRepo.findByName(name);
+    }
+
+    public void cleanUpDepartment(long id) {
+        UnitOfWork.newCurrent();
+        Department department = departmentRepo.findById(id).orElse(null);
+        if (department != null) {
+            department.markRemoved();
+        }
+        UnitOfWork.getCurrent().commit();
     }
 }

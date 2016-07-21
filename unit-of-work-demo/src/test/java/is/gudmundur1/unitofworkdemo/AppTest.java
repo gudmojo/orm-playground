@@ -13,7 +13,8 @@ public class AppTest {
     private TestDriver testDriver = new TestDriver();
 
     @Test
-    public void createOrderAndReadItBack() {
+    public void createDepartmentAndReadItBack() {
+        testDriver.cleanUpDepartment(1L);
         testDriver.createDepartment();
         String postgresUsername = "postgres";
         Flyway flyway = new Flyway();

@@ -3,7 +3,10 @@ package is.gudmundur1.unitofworkdemo;
 public class Department extends DomainObject {
 
     private Long id;
-    private final String name;
+    private String name;
+
+    public Department() {
+    }
 
     public Department(Long id, String name) {
         this.id = id;
@@ -23,5 +26,13 @@ public class Department extends DomainObject {
 
     public String getName() {
         return name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
