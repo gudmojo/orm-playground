@@ -1,9 +1,9 @@
 package is.gudmundur1.unitofworkdemo;
 
 import is.gudmundur1.unitofworkdemo.core.*;
-import is.gudmundur1.unitofworkdemo.postgres.DbClient;
-import is.gudmundur1.unitofworkdemo.postgres.SqlDepartmentRepo;
-import is.gudmundur1.unitofworkdemo.postgres.SqlEmployeeRepo;
+import is.gudmundur1.unitofworkdemo.postgres.PostgresClient;
+import is.gudmundur1.unitofworkdemo.postgres.PostgresDepartmentRepo;
+import is.gudmundur1.unitofworkdemo.postgres.PostgresEmployeeRepo;
 
 import java.util.Optional;
 
@@ -12,14 +12,14 @@ public class TestDriver {
     public static final String SALES_NAME = "Sales";
     public static final String SALES_NAME_2 = "Sales2";
 
-    private DbClient dbClient;
+    private PostgresClient dbClient;
     private DepartmentRepo departmentRepo;
     private EmployeeRepo employeeRepo;
 
     public TestDriver() {
-        this.dbClient = new DbClient();
-        this.departmentRepo = new SqlDepartmentRepo(dbClient);
-        this.employeeRepo = new SqlEmployeeRepo(dbClient);
+        this.dbClient = new PostgresClient();
+        this.departmentRepo = new PostgresDepartmentRepo(dbClient);
+        this.employeeRepo = new PostgresEmployeeRepo(dbClient);
     }
 
     public void createDepartment(long id) {

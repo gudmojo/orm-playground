@@ -10,11 +10,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class SqlEmployeeRepo implements EmployeeRepo {
+public class PostgresEmployeeRepo implements EmployeeRepo {
 
-    private DbClient dbClient;
+    private PostgresClient dbClient;
 
-    public SqlEmployeeRepo(DbClient dbClient) {
+    public PostgresEmployeeRepo(PostgresClient dbClient) {
         this.dbClient = dbClient;
     }
 

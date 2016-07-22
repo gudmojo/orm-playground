@@ -11,14 +11,14 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DbClient {
+public class PostgresClient {
 
     public static final String dbUsername = "postgres";
     public static final String dbPassword = "mysecretpassword";
 
     private PoolingDataSource<PoolableConnection> dataSource;
 
-    public DbClient() {
+    public PostgresClient() {
         this.dataSource = setupDataSource("jdbc:postgresql://localhost:5432/postgres");
     }
 

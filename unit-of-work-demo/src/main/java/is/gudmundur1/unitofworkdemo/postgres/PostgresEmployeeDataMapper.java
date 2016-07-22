@@ -8,7 +8,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class EmployeeDataMapper extends AbstractDataMapper<Employee> {
+public class PostgresEmployeeDataMapper extends AbstractDataMapper<Employee> {
 
     @Override
     public void insert(Employee employee, TransactionContext transactionContext) {
