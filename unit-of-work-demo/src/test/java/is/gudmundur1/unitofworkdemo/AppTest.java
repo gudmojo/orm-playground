@@ -138,8 +138,8 @@ public class AppTest {
         assertThat(employeeList.size(), is(2));
         Employee bonnie2 = employeeList.stream()
                 .filter(employee -> "Bonnie2".equals(employee.getName())).findFirst().get();
-        assertThat(bonnie.getName(), is("Bonnie2"));
-        assertThat(bonnie.getDepartmentId(), is(deptId));
+        assertThat(bonnie2.getName(), is("Bonnie2"));
+        assertThat(bonnie2.getDepartmentId(), is(deptId));
         Employee clyde = employeeList.stream()
                 .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
         assertThat(clyde.getName(), is("Clyde"));
