@@ -19,9 +19,10 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest
 public class AppTest {
 
-
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    DepartmentAggregateRepository departmentAggregateRepository;
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
@@ -93,6 +94,31 @@ public class AppTest {
         assertThat(department, is(notNullValue()));
         assertThat(department.getName(), is(SALES_NAME));
         List<Employee> employeeList = employeeRepository.findByDepartment(department);
+        assertThat(employeeList, is(notNullValue()));
+        assertThat(employeeList.size(), is(2));
+        Employee bonnie = employeeList.stream()
+                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+        assertThat(bonnie.getName(), is("Bonnie"));
+        assertThat(bonnie.getDepartment().getId(), is(deptId));
+        Employee clyde = employeeList.stream()
+                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Bonnie"));
+        assertThat(clyde.getDepartment().getId(), is(deptId));
+    }
+
+    @Test
+    public void createDepartmentWithEmployeesAndReadAggregateBack() {
+
+        long deptId = 8L;
+        testDriver.cleanUpEmployee(5L);
+        testDriver.cleanUpEmployee(6L);
+        testDriver.cleanUpDepartment(deptId);
+
+        testDriver.createDepartmentWithEmployees(deptId, 5L, 6L);
+        DepartmentAggregate department = departmentAggregateRepository.findOne(deptId);
+        assertThat(department, is(notNullValue()));
+        assertThat(department.getName(), is(SALES_NAME));
+        List<Employee> employeeList = department.getEmployeeList();
         assertThat(employeeList, is(notNullValue()));
         assertThat(employeeList.size(), is(2));
         Employee bonnie = employeeList.stream()
