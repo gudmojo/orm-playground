@@ -12,8 +12,6 @@
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/postgres"/>
             <property name="hibernate.connection.username" value="postgres"/>
             <property name="hibernate.connection.password" value="mysecretpassword"/>
-            <property name="hibernate.connection.autocommit" value="false"/>
-            <property name="hibernate.current_session_context_class" value="thread"/>
 
             <!-- JDBC connection pool (use the built-in) -->
             <property name="hibernate.connection.pool_size" value="10"/>
