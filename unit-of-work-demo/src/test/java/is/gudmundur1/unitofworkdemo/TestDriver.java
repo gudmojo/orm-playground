@@ -29,11 +29,11 @@ public class TestDriver {
         UnitOfWork.getCurrent().commit();
     }
 
-    public void createDepartmentWithEmployees(long id) {
+    public void createDepartmentWithEmployees(long id, long id2, long id3) {
         UnitOfWork.newCurrent();
         Department department = Department.create(id, SALES_NAME);
-        Employee.create(1L, department.getId(), "Bonnie");
-        Employee.create(2L, department.getId(), "Clyde");
+        Employee.create(id2, department.getId(), "Bonnie");
+        Employee.create(id3, department.getId(), "Clyde");
         UnitOfWork.getCurrent().commit();
     }
 

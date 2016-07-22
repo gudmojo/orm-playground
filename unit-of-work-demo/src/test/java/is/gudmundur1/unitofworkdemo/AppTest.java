@@ -80,7 +80,7 @@ public class AppTest {
         testDriver.cleanUpEmployee(2L);
         testDriver.cleanUpDepartment(deptId);
 
-        testDriver.createDepartmentWithEmployees(deptId);
+        testDriver.createDepartmentWithEmployees(deptId, 1L, 2L);
         Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
         assertThat(department, is(notNullValue()));
         assertThat(department.getName(), is(SALES_NAME));
@@ -115,6 +115,35 @@ public class AppTest {
         }
         Department department = testDriver.getDepartmentRepo().findById(deptId1, false).orElse(null);
         assertThat(department, is(nullValue()));
+    }
+
+    @Test
+    public void updateEmployeeViaDepartment() {
+
+        long deptId = 7L;
+        testDriver.cleanUpEmployee(3L);
+        testDriver.cleanUpEmployee(4L);
+        testDriver.cleanUpDepartment(deptId);
+
+        testDriver.createDepartmentWithEmployees(deptId, 3L, 4L);
+        Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
+        List<Employee> employeeList = department.getEmployeeList();
+        System.out.println("begin");
+        UnitOfWork.newCurrent();
+        Employee bonnie = employeeList.stream()
+                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+        bonnie.setName("Bonnie2");
+        UnitOfWork.getCurrent().commit();
+        assertThat(employeeList, is(notNullValue()));
+        assertThat(employeeList.size(), is(2));
+        Employee bonnie2 = employeeList.stream()
+                .filter(employee -> "Bonnie2".equals(employee.getName())).findFirst().get();
+        assertThat(bonnie.getName(), is("Bonnie2"));
+        assertThat(bonnie.getDepartmentId(), is(deptId));
+        Employee clyde = employeeList.stream()
+                .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Clyde"));
+        assertThat(clyde.getDepartmentId(), is(deptId));
     }
 
 }

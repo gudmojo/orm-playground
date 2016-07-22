@@ -45,6 +45,7 @@ public class Employee extends DomainObject {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
+        markDirty();
     }
 
     public void delete() {

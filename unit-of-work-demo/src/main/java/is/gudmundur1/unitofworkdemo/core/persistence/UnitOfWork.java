@@ -68,18 +68,21 @@ public class UnitOfWork {
 
     private void insertNew(TransactionContext transactionContext) {
         for (DomainObject obj : newObjects) {
+            System.out.println("Insert " + obj.getClass().getSimpleName() + ":" + obj.getId());
             MapperRegistry.getMapper(obj.getClass()).insert(obj, transactionContext);
         }
     }
 
     private void updateDirty(TransactionContext transactionContext) {
         for (DomainObject obj : dirtyObjects) {
+            System.out.println("Update " + obj.getClass().getSimpleName() + ":" + obj.getId());
             MapperRegistry.getMapper(obj.getClass()).update(obj, transactionContext);
         }
     }
 
     private void deleteRemoved(TransactionContext transactionContext) {
         for (DomainObject obj : removedObjects) {
+            System.out.println("Delete " + obj.getClass().getSimpleName() + ":" + obj.getId());
             MapperRegistry.getMapper(obj.getClass()).delete(obj, transactionContext);
         }
     }
