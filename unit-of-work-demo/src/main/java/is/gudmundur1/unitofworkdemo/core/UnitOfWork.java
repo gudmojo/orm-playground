@@ -57,26 +57,28 @@ public class UnitOfWork {
     }
 
     public void commit() {
-        insertNew();
-        updateDirty();
-        deleteRemoved();
+        TransactionContext transactionContext = CoreServiceRegistry.getTransactionContextFactory().create();
+        insertNew(transactionContext);
+        updateDirty(transactionContext);
+        deleteRemoved(transactionContext);
+        transactionContext.commit();
     }
 
-    private void insertNew() {
+    private void insertNew(TransactionContext transactionContext) {
         for (DomainObject obj : newObjects) {
-            MapperRegistry.getMapper(obj.getClass()).insert(obj);
+            MapperRegistry.getMapper(obj.getClass()).insert(obj, transactionContext);
         }
     }
 
-    private void updateDirty() {
+    private void updateDirty(TransactionContext transactionContext) {
         for (DomainObject obj : dirtyObjects) {
-            MapperRegistry.getMapper(obj.getClass()).update(obj);
+            MapperRegistry.getMapper(obj.getClass()).update(obj, transactionContext);
         }
     }
 
-    private void deleteRemoved() {
+    private void deleteRemoved(TransactionContext transactionContext) {
         for (DomainObject obj : removedObjects) {
-            MapperRegistry.getMapper(obj.getClass()).delete(obj);
+            MapperRegistry.getMapper(obj.getClass()).delete(obj, transactionContext);
         }
     }
 }

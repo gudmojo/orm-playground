@@ -2,26 +2,24 @@ package is.gudmundur1.unitofworkdemo.postgres;
 
 import is.gudmundur1.unitofworkdemo.core.AbstractDataMapper;
 import is.gudmundur1.unitofworkdemo.core.Department;
+import is.gudmundur1.unitofworkdemo.core.TransactionContext;
 
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DepartmentDataMapper extends AbstractDataMapper<Department> {
 
-    private DbClient dbClient;
-
-    public DepartmentDataMapper(DbClient dbClient) {
-        this.dbClient = dbClient;
-    }
-
     @Override
-    public void insert(Department department) {
+    public void insert(Department department, TransactionContext transactionContext) {
         String sql = "insert into departments(id, name) values (?, ?)";
         try {
             SqlParams sqlParams = new SqlParams();
             sqlParams.addLong(department.getId());
             sqlParams.addString(department.getName());
-            CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
+            PostgresTransactionContext postgresTransactionContext = (PostgresTransactionContext) transactionContext;
+            Connection connection = postgresTransactionContext.getPostgresConnection();
+            CallableStatement callableStatement = connection.prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();
         } catch (SQLException e) {
@@ -30,13 +28,15 @@ public class DepartmentDataMapper extends AbstractDataMapper<Department> {
     }
 
     @Override
-    public void update(Department department) {
+    public void update(Department department, TransactionContext transactionContext) {
         String sql = "update departments set name = ? where id = ?";
         try {
             SqlParams sqlParams = new SqlParams();
             sqlParams.addString(department.getName());
             sqlParams.addLong(department.getId());
-            CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
+            PostgresTransactionContext postgresTransactionContext = (PostgresTransactionContext) transactionContext;
+            Connection connection = postgresTransactionContext.getPostgresConnection();
+            CallableStatement callableStatement = connection.prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();
         } catch (SQLException e) {
@@ -45,12 +45,14 @@ public class DepartmentDataMapper extends AbstractDataMapper<Department> {
     }
 
     @Override
-    public void delete(Department department) {
+    public void delete(Department department, TransactionContext transactionContext) {
         String sql = "delete from departments where id = ?";
         try {
             SqlParams sqlParams = new SqlParams();
             sqlParams.addLong(department.getId());
-            CallableStatement callableStatement = dbClient.getConnection().prepareCall(sql);
+            PostgresTransactionContext postgresTransactionContext = (PostgresTransactionContext) transactionContext;
+            Connection connection = postgresTransactionContext.getPostgresConnection();
+            CallableStatement callableStatement = connection.prepareCall(sql);
             sqlParams.fill(callableStatement);
             callableStatement.execute();
         } catch (SQLException e) {
