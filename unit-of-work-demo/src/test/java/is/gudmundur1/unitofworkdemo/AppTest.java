@@ -2,7 +2,7 @@ package is.gudmundur1.unitofworkdemo;
 
 import is.gudmundur1.unitofworkdemo.core.Department;
 import is.gudmundur1.unitofworkdemo.core.Employee;
-import is.gudmundur1.unitofworkdemo.core.UnitOfWork;
+import is.gudmundur1.unitofworkdemo.core.persistence.UnitOfWork;
 import is.gudmundur1.unitofworkdemo.shell.Init;
 import org.flywaydb.core.Flyway;
 import org.junit.Test;

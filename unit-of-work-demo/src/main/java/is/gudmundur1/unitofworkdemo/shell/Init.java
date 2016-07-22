@@ -1,6 +1,7 @@
 package is.gudmundur1.unitofworkdemo.shell;
 
 import is.gudmundur1.unitofworkdemo.core.*;
+import is.gudmundur1.unitofworkdemo.core.persistence.MapperRegistry;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresClient;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresDepartmentDataMapper;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresEmployeeDataMapper;

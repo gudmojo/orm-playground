@@ -1,4 +1,4 @@
-package is.gudmundur1.unitofworkdemo.core;
+package is.gudmundur1.unitofworkdemo.core.persistence;
 
 @FunctionalInterface
 public interface TransactionContextFactory {

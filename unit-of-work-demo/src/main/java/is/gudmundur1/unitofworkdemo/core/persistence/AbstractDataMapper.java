@@ -1,4 +1,6 @@
-package is.gudmundur1.unitofworkdemo.core;
+package is.gudmundur1.unitofworkdemo.core.persistence;
+
+import is.gudmundur1.unitofworkdemo.core.DomainObject;
 
 public abstract class AbstractDataMapper<T extends DomainObject> {
 

@@ -1,6 +1,7 @@
 package is.gudmundur1.unitofworkdemo;
 
 import is.gudmundur1.unitofworkdemo.core.*;
+import is.gudmundur1.unitofworkdemo.core.persistence.UnitOfWork;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresClient;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresDepartmentRepo;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresEmployeeRepo;

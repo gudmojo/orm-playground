@@ -1,5 +1,7 @@
 package is.gudmundur1.unitofworkdemo.core;
 
+import is.gudmundur1.unitofworkdemo.core.persistence.UnitOfWork;
+
 public abstract class DomainObject {
 
     protected void markNew() {

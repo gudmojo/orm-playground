@@ -1,6 +1,8 @@
-package is.gudmundur1.unitofworkdemo.core;
+package is.gudmundur1.unitofworkdemo.core.persistence;
 
 import com.google.common.base.Preconditions;
+import is.gudmundur1.unitofworkdemo.core.CoreServiceRegistry;
+import is.gudmundur1.unitofworkdemo.core.DomainObject;
 
 import java.util.ArrayList;
 import java.util.List;

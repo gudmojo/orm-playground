@@ -1,4 +1,6 @@
-package is.gudmundur1.unitofworkdemo.core;
+package is.gudmundur1.unitofworkdemo.core.persistence;
+
+import is.gudmundur1.unitofworkdemo.core.DomainObject;
 
 import java.util.HashMap;
 import java.util.Map;
