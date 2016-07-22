@@ -1,13 +1,11 @@
 package is.gudmundur1.unitofworkdemo;
 
-import is.gudmundur1.unitofworkdemo.core.Department;
-import is.gudmundur1.unitofworkdemo.core.DepartmentRepo;
-import is.gudmundur1.unitofworkdemo.core.Employee;
-import is.gudmundur1.unitofworkdemo.core.EmployeeRepo;
-import is.gudmundur1.unitofworkdemo.core.persistence.UnitOfWork;
+import is.gudmundur1.unitofworkdemo.core.*;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresClient;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresDepartmentRepo;
 import is.gudmundur1.unitofworkdemo.postgres.PostgresEmployeeRepo;
+import is.gudmundur1.unitofworkdemo.shell.Init;
+import org.hibernate.Session;
 
 import java.util.Optional;
 
@@ -24,36 +22,47 @@ public class TestDriver {
         this.dbClient = new PostgresClient();
         this.departmentRepo = new PostgresDepartmentRepo(dbClient);
         this.employeeRepo = new PostgresEmployeeRepo(dbClient);
+        Init.init();
     }
 
     public void createDepartment(long id) {
-        UnitOfWork.newCurrent();
-        Department.create(id, SALES_NAME);
-        UnitOfWork.getCurrent().commit();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(new Department(id, SALES_NAME));
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void createDepartmentWithEmployees(long id, long id2, long id3) {
-        UnitOfWork.newCurrent();
-        Department department = Department.create(id, SALES_NAME);
-        Employee.create(id2, department.getId(), "Bonnie");
-        Employee.create(id3, department.getId(), "Clyde");
-        UnitOfWork.getCurrent().commit();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
+        Department department = new Department(id, SALES_NAME);
+        session.save(department);
+        session.save(new Employee(id2, department.getId(), "Bonnie"));
+        session.save(new Employee(id3, department.getId(), "Clyde"));
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void updateDepartment(long id) {
-        UnitOfWork.newCurrent();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
         Department department = departmentRepo.findById(id, false).orElse(null);
         department.setName(SALES_NAME_2);
+        session.update(department);
 
-        UnitOfWork.getCurrent().commit();
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void deleteDepartment(long id) {
-        UnitOfWork.newCurrent();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
         Department department = departmentRepo.findById(id, false).orElse(null);
-        department.delete();
+        session.delete(department);
 
-        UnitOfWork.getCurrent().commit();
+        session.getTransaction().commit();
+        session.close();
     }
 
     public Optional<Department> findByName(String name) {
@@ -61,21 +70,25 @@ public class TestDriver {
     }
 
     public void cleanUpDepartment(long id) {
-        UnitOfWork.newCurrent();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
         Department department = departmentRepo.findById(id, false).orElse(null);
         if (department != null) {
-            department.delete();
+            session.delete(department);
         }
-        UnitOfWork.getCurrent().commit();
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void cleanUpEmployee(long id) {
-        UnitOfWork.newCurrent();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
         Employee employee = employeeRepo.findById(id).orElse(null);
         if (employee != null) {
-            employee.delete();
+            session.delete(employee);
         }
-        UnitOfWork.getCurrent().commit();
+        session.getTransaction().commit();
+        session.close();
     }
 
     public DepartmentRepo getDepartmentRepo() {

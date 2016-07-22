@@ -16,12 +16,6 @@ public class Department extends DomainObject {
         this.name = name;
     }
 
-    public static Department create(Long id, String name) {
-        Department department = new Department(id, name);
-        department.markNew();
-        return department;
-    }
-
     @Override
     public Long getId() {
         return id;
@@ -37,7 +31,6 @@ public class Department extends DomainObject {
 
     public void setName(String name) {
         this.name = name;
-        markDirty();
     }
 
     public void setEmployeeList(List<Employee> employeeList) {
@@ -46,9 +39,5 @@ public class Department extends DomainObject {
 
     public List<Employee> getEmployeeList() {
         return employeeList;
-    }
-
-    public void delete() {
-        markRemoved();
     }
 }

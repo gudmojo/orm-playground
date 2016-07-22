@@ -1,16 +1,16 @@
 package is.gudmundur1.unitofworkdemo.core;
 
-import is.gudmundur1.unitofworkdemo.core.persistence.TransactionContextFactory;
+import org.hibernate.SessionFactory;
 
 public class CoreServiceRegistry {
 
-    private static TransactionContextFactory transactionContextFactory;
+    private static SessionFactory sessionFactory;
 
-    public static TransactionContextFactory getTransactionContextFactory() {
-        return transactionContextFactory;
+    public static void setSessionFactory(SessionFactory sessionFactory) {
+        CoreServiceRegistry.sessionFactory = sessionFactory;
     }
 
-    public static void setTransactionContextFactory(TransactionContextFactory transactionContextFactory) {
-        CoreServiceRegistry.transactionContextFactory = transactionContextFactory;
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }
