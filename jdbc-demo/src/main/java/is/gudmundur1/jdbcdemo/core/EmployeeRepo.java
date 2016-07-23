@@ -1,4 +1,4 @@
-package is.gudmundur1.springdatajpademo.core;
+package is.gudmundur1.jdbcdemo.core;
 
 import java.util.Optional;
 

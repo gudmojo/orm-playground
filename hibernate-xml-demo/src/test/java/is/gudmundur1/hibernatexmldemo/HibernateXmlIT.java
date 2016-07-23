@@ -1,26 +1,25 @@
-package is.gudmundur1.jdbcdemo;
+package is.gudmundur1.hibernatexmldemo;
 
-import is.gudmundur1.springdatajpademo.core.Department;
-import is.gudmundur1.springdatajpademo.core.Employee;
-import is.gudmundur1.springdatajpademo.core.persistence.UnitOfWork;
-import is.gudmundur1.springdatajpademo.shell.Init;
+import is.gudmundur1.hibernatexmldemo.core.CoreServiceRegistry;
+import is.gudmundur1.hibernatexmldemo.core.Department;
+import is.gudmundur1.hibernatexmldemo.core.Employee;
+import is.gudmundur1.hibernatexmldemo.shell.Init;
 import org.flywaydb.core.Flyway;
 import org.hamcrest.CoreMatchers;
+import org.hibernate.Session;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
 
-public class AppTest {
+public class HibernateXmlIT {
 
     private static final String TOO_LONG_DEPT_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
     private TestDriver testDriver = new TestDriver();
 
-    public AppTest() {
+    public HibernateXmlIT() {
         Init.init();
     }
 
@@ -47,16 +46,17 @@ public class AppTest {
 
     @Test
     public void updateDepartmentAndReadItBack() {
-
+        System.out.print("g1");
         long deptId = 2L;
         testDriver.cleanUpDepartment(deptId);
 
+        System.out.print("g1");
         testDriver.createDepartment(deptId);
         testDriver.updateDepartment(deptId);
 
         Department department = testDriver.getDepartmentRepo().findById(deptId, false).orElse(null);
         assertThat(department, is(notNullValue()));
-        assertThat(department.getName(), is(TestDriver.SALES_NAME_2));
+        assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME_2));
     }
 
     @Test
@@ -105,11 +105,13 @@ public class AppTest {
         testDriver.cleanUpDepartment(deptId1);
         testDriver.cleanUpDepartment(deptId2);
 
-        UnitOfWork.newCurrent();
-        Department.create(deptId1, TestDriver.SALES_NAME);
-        Department.create(deptId2, TOO_LONG_DEPT_NAME);
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(new Department(deptId1, TestDriver.SALES_NAME));
+        session.save(new Department(deptId2, TOO_LONG_DEPT_NAME));
         try {
-            UnitOfWork.getCurrent().commit();
+            session.getTransaction().commit();
+            session.close();
         } catch (Exception ignored) {
             // ignore
         }
@@ -129,11 +131,14 @@ public class AppTest {
         Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
         List<Employee> employeeList = department.getEmployeeList();
         System.out.println("begin");
-        UnitOfWork.newCurrent();
+        Session session = CoreServiceRegistry.getSessionFactory().openSession();
+        session.beginTransaction();
         Employee bonnie = employeeList.stream()
                 .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
         bonnie.setName("Bonnie2");
-        UnitOfWork.getCurrent().commit();
+        session.update(bonnie);
+        session.getTransaction().commit();
+        session.close();
         assertThat(employeeList, is(notNullValue()));
         assertThat(employeeList.size(), is(2));
         Employee bonnie2 = employeeList.stream()

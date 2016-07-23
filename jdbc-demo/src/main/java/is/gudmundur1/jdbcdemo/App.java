@@ -1,7 +1,7 @@
 package is.gudmundur1.jdbcdemo;
 
 
-import is.gudmundur1.springdatajpademo.shell.Init;
+import is.gudmundur1.jdbcdemo.shell.Init;
 
 /**
  * Hello world!

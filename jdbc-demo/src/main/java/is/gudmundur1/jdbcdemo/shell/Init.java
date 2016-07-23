@@ -1,12 +1,11 @@
-package is.gudmundur1.springdatajpademo.shell;
+package is.gudmundur1.jdbcdemo.shell;
 
 import is.gudmundur1.jdbcdemo.postgres.PostgresClient;
 import is.gudmundur1.jdbcdemo.postgres.PostgresEmployeeDataMapper;
-import is.gudmundur1.springdatajpademo.core.CoreServiceRegistry;
-import is.gudmundur1.springdatajpademo.core.Department;
-import is.gudmundur1.springdatajpademo.core.Employee;
-import is.gudmundur1.springdatajpademo.core.*;
-import is.gudmundur1.springdatajpademo.core.persistence.MapperRegistry;
+import is.gudmundur1.jdbcdemo.core.CoreServiceRegistry;
+import is.gudmundur1.jdbcdemo.core.Department;
+import is.gudmundur1.jdbcdemo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.persistence.MapperRegistry;
 import is.gudmundur1.jdbcdemo.postgres.PostgresDepartmentDataMapper;
 
 import java.sql.SQLException;

@@ -1,12 +1,10 @@
 package is.gudmundur1.jdbcdemo;
 
-import is.gudmundur1.springdatajpademo.core.Department;
-import is.gudmundur1.springdatajpademo.core.DepartmentRepo;
-import is.gudmundur1.springdatajpademo.core.Employee;
-import is.gudmundur1.springdatajpademo.core.EmployeeRepo;
-import is.gudmundur1.springdatajpademo.core.*;
-import is.gudmundur1.springdatajpademo.core.persistence.UnitOfWork;
-import is.gudmundur1.jdbcdemo.postgres.PostgresClient;
+import is.gudmundur1.jdbcdemo.core.Department;
+import is.gudmundur1.jdbcdemo.core.DepartmentRepo;
+import is.gudmundur1.jdbcdemo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.EmployeeRepo;
+import is.gudmundur1.jdbcdemo.core.persistence.UnitOfWork;
 import is.gudmundur1.jdbcdemo.postgres.PostgresDepartmentRepo;
 import is.gudmundur1.jdbcdemo.postgres.PostgresEmployeeRepo;
 
@@ -17,20 +15,19 @@ public class TestDriver {
     public static final String SALES_NAME = "Sales";
     public static final String SALES_NAME_2 = "Sales2";
 
-    private PostgresClient dbClient;
     private DepartmentRepo departmentRepo;
     private EmployeeRepo employeeRepo;
 
     public TestDriver() {
-        this.dbClient = new PostgresClient();
-        this.departmentRepo = new PostgresDepartmentRepo(dbClient);
-        this.employeeRepo = new PostgresEmployeeRepo(dbClient);
+        this.departmentRepo = new PostgresDepartmentRepo();
+        this.employeeRepo = new PostgresEmployeeRepo();
     }
 
     public void createDepartment(long id) {
         UnitOfWork.newCurrent();
         Department.create(id, SALES_NAME);
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public void createDepartmentWithEmployees(long id, long id2, long id3) {
@@ -39,6 +36,7 @@ public class TestDriver {
         Employee.create(id2, department.getId(), "Bonnie");
         Employee.create(id3, department.getId(), "Clyde");
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public void updateDepartment(long id) {
@@ -47,6 +45,7 @@ public class TestDriver {
         department.setName(SALES_NAME_2);
 
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public void deleteDepartment(long id) {
@@ -55,6 +54,7 @@ public class TestDriver {
         department.delete();
 
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public Optional<Department> findByName(String name) {
@@ -68,6 +68,7 @@ public class TestDriver {
             department.delete();
         }
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public void cleanUpEmployee(long id) {
@@ -77,6 +78,7 @@ public class TestDriver {
             employee.delete();
         }
         UnitOfWork.getCurrent().commit();
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     public DepartmentRepo getDepartmentRepo() {

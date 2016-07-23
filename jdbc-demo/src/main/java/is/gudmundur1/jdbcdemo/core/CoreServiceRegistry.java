@@ -1,6 +1,6 @@
-package is.gudmundur1.springdatajpademo.core;
+package is.gudmundur1.jdbcdemo.core;
 
-import is.gudmundur1.springdatajpademo.core.persistence.TransactionContextFactory;
+import is.gudmundur1.jdbcdemo.core.persistence.TransactionContextFactory;
 
 public class CoreServiceRegistry {
 

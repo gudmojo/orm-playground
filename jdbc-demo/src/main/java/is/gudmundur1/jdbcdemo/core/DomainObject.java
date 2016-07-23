@@ -1,6 +1,6 @@
-package is.gudmundur1.springdatajpademo.core;
+package is.gudmundur1.jdbcdemo.core;
 
-import is.gudmundur1.springdatajpademo.core.persistence.UnitOfWork;
+import is.gudmundur1.jdbcdemo.core.persistence.UnitOfWork;
 
 public abstract class DomainObject {
 

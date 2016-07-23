@@ -1,6 +1,7 @@
-package is.gudmundur1.springdatajpademo.shell;
+package is.gudmundur1.jdbcdemo.shell;
 
 import is.gudmundur1.jdbcdemo.postgres.PostgresTransactionContext;
+import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,5 +26,10 @@ public class TransactionContextImpl implements PostgresTransactionContext {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void close() {
+        DbUtils.closeQuietly(postgresConnection);
     }
 }

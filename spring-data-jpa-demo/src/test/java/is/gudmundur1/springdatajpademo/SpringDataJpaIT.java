@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AppTest {
+public class SpringDataJpaIT {
 
     @Autowired
     DepartmentRepository departmentRepository;
@@ -175,5 +175,33 @@ public class AppTest {
         assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartment().getId(), is(deptId));
     }
+
+    @Test
+    public void performanceCreateDepartmentWithEmployeesAndReadItBack() {
+        for (int i=0; i<1000; i++) {
+            long deptId = 4L;
+            testDriver.cleanUpEmployee(1L);
+            testDriver.cleanUpEmployee(2L);
+            testDriver.cleanUpDepartment(deptId);
+
+            testDriver.createDepartmentWithEmployees(deptId, 1L, 2L);
+            DepartmentAggregate department = departmentAggregateRepository.findOne(deptId);
+            assertThat(department, is(notNullValue()));
+            assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME));
+            List<Employee> employeeList = department.getEmployeeList();
+            assertThat(employeeList, is(notNullValue()));
+            assertThat(employeeList.size(), is(2));
+            Employee bonnie = employeeList.stream()
+                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+            assertThat(bonnie.getName(), is("Bonnie"));
+            assertThat(bonnie.getDepartment().getId(), is(deptId));
+            Employee clyde = employeeList.stream()
+                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+            assertThat(clyde.getName(), is("Bonnie"));
+            assertThat(clyde.getDepartment().getId(), is(deptId));
+        }
+
+    }
+
 
 }

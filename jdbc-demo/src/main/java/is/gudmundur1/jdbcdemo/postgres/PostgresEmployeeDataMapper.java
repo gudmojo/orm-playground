@@ -1,8 +1,8 @@
 package is.gudmundur1.jdbcdemo.postgres;
 
-import is.gudmundur1.springdatajpademo.core.persistence.AbstractDataMapper;
-import is.gudmundur1.springdatajpademo.core.Employee;
-import is.gudmundur1.springdatajpademo.core.persistence.TransactionContext;
+import is.gudmundur1.jdbcdemo.core.persistence.AbstractDataMapper;
+import is.gudmundur1.jdbcdemo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.persistence.TransactionContext;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

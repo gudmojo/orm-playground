@@ -1,25 +1,26 @@
-package is.gudmundur1.hibernatexmldemo;
+package is.gudmundur1.jdbcdemo;
 
-import is.gudmundur1.hibernatexmldemo.core.CoreServiceRegistry;
-import is.gudmundur1.hibernatexmldemo.core.Department;
-import is.gudmundur1.hibernatexmldemo.core.Employee;
-import is.gudmundur1.hibernatexmldemo.shell.Init;
+import is.gudmundur1.jdbcdemo.core.Department;
+import is.gudmundur1.jdbcdemo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.persistence.UnitOfWork;
+import is.gudmundur1.jdbcdemo.shell.Init;
 import org.flywaydb.core.Flyway;
 import org.hamcrest.CoreMatchers;
-import org.hibernate.Session;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
-public class AppTest {
+public class JdbcIT {
 
     private static final String TOO_LONG_DEPT_NAME = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
     private TestDriver testDriver = new TestDriver();
 
-    public AppTest() {
+    public JdbcIT() {
         Init.init();
     }
 
@@ -46,17 +47,16 @@ public class AppTest {
 
     @Test
     public void updateDepartmentAndReadItBack() {
-        System.out.print("g1");
+
         long deptId = 2L;
         testDriver.cleanUpDepartment(deptId);
 
-        System.out.print("g1");
         testDriver.createDepartment(deptId);
         testDriver.updateDepartment(deptId);
 
         Department department = testDriver.getDepartmentRepo().findById(deptId, false).orElse(null);
         assertThat(department, is(notNullValue()));
-        assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME_2));
+        assertThat(department.getName(), is(TestDriver.SALES_NAME_2));
     }
 
     @Test
@@ -105,15 +105,13 @@ public class AppTest {
         testDriver.cleanUpDepartment(deptId1);
         testDriver.cleanUpDepartment(deptId2);
 
-        Session session = CoreServiceRegistry.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.save(new Department(deptId1, TestDriver.SALES_NAME));
-        session.save(new Department(deptId2, TOO_LONG_DEPT_NAME));
+        UnitOfWork.newCurrent();
+        Department.create(deptId1, TestDriver.SALES_NAME);
+        Department.create(deptId2, TOO_LONG_DEPT_NAME);
         try {
-            session.getTransaction().commit();
-            session.close();
+            UnitOfWork.getCurrent().commit();
         } catch (Exception ignored) {
-            // ignore
+            UnitOfWork.getCurrent().getTransactionContext().close();
         }
         Department department = testDriver.getDepartmentRepo().findById(deptId1, false).orElse(null);
         assertThat(department, is(nullValue()));
@@ -131,14 +129,11 @@ public class AppTest {
         Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
         List<Employee> employeeList = department.getEmployeeList();
         System.out.println("begin");
-        Session session = CoreServiceRegistry.getSessionFactory().openSession();
-        session.beginTransaction();
+        UnitOfWork.newCurrent();
         Employee bonnie = employeeList.stream()
                 .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
         bonnie.setName("Bonnie2");
-        session.update(bonnie);
-        session.getTransaction().commit();
-        session.close();
+        UnitOfWork.getCurrent().commit();
         assertThat(employeeList, is(notNullValue()));
         assertThat(employeeList.size(), is(2));
         Employee bonnie2 = employeeList.stream()
@@ -149,6 +144,34 @@ public class AppTest {
                 .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
         assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartmentId(), is(deptId));
+        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
+    @Test
+    public void performanceCreateDepartmentWithEmployeesAndReadItBack() {
+        for (int i = 0; i < 1000; i++) {
+            long deptId = 4L;
+            testDriver.cleanUpEmployee(1L);
+            testDriver.cleanUpEmployee(2L);
+            testDriver.cleanUpDepartment(deptId);
+
+            testDriver.createDepartmentWithEmployees(deptId, 1L, 2L);
+            UnitOfWork.newCurrent();
+            Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
+            assertThat(department, is(notNullValue()));
+            assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME));
+            List<Employee> employeeList = department.getEmployeeList();
+            assertThat(employeeList, is(notNullValue()));
+            assertThat(employeeList.size(), is(2));
+            Employee bonnie = employeeList.stream()
+                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+            assertThat(bonnie.getName(), is("Bonnie"));
+            assertThat(bonnie.getDepartmentId(), is(deptId));
+            Employee clyde = employeeList.stream()
+                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
+            assertThat(clyde.getName(), is("Bonnie"));
+            assertThat(clyde.getDepartmentId(), is(deptId));
+            UnitOfWork.getCurrent().getTransactionContext().close();
+        }
+    }
 }

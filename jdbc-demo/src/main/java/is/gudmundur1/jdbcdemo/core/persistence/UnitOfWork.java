@@ -1,8 +1,8 @@
-package is.gudmundur1.springdatajpademo.core.persistence;
+package is.gudmundur1.jdbcdemo.core.persistence;
 
 import com.google.common.base.Preconditions;
-import is.gudmundur1.springdatajpademo.core.CoreServiceRegistry;
-import is.gudmundur1.springdatajpademo.core.DomainObject;
+import is.gudmundur1.jdbcdemo.core.CoreServiceRegistry;
+import is.gudmundur1.jdbcdemo.core.DomainObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,13 @@ public class UnitOfWork {
     private List<DomainObject> newObjects = new ArrayList<>();
     private List<DomainObject> dirtyObjects = new ArrayList<>();
     private List<DomainObject> removedObjects = new ArrayList<>();
+    private TransactionContext transactionContext;
 
     private static ThreadLocal<UnitOfWork> current = new ThreadLocal<>();
+
+    public UnitOfWork() {
+        this.transactionContext = CoreServiceRegistry.getTransactionContextFactory().create();
+    }
 
     public static void newCurrent() {
         setCurrent(new UnitOfWork());
@@ -59,7 +64,6 @@ public class UnitOfWork {
     }
 
     public void commit() {
-        TransactionContext transactionContext = CoreServiceRegistry.getTransactionContextFactory().create();
         insertNew(transactionContext);
         updateDirty(transactionContext);
         deleteRemoved(transactionContext);
@@ -85,5 +89,9 @@ public class UnitOfWork {
             System.out.println("Delete " + obj.getClass().getSimpleName() + ":" + obj.getId());
             MapperRegistry.getMapper(obj.getClass()).delete(obj, transactionContext);
         }
+    }
+
+    public TransactionContext getTransactionContext() {
+        return transactionContext;
     }
 }

@@ -1,4 +1,4 @@
-package is.gudmundur1.springdatajpademo.core;
+package is.gudmundur1.jdbcdemo.core;
 
 public class Employee extends DomainObject {
 

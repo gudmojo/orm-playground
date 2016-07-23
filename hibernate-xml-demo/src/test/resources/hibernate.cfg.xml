@@ -29,8 +29,8 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">validate</property>
 
-        <mapping resource="is/gudmundur1/springdatajpademo/core/Department.hbm.xml"/>
-        <mapping resource="is/gudmundur1/springdatajpademo/core/Employee.hbm.xml"/>
+        <mapping resource="is/gudmundur1/jdbcdemo/core/Department.hbm.xml"/>
+        <mapping resource="is/gudmundur1/jdbcdemo/core/Employee.hbm.xml"/>
 
     </session-factory>
 

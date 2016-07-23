@@ -1,6 +1,6 @@
-package is.gudmundur1.springdatajpademo.core.persistence;
+package is.gudmundur1.jdbcdemo.core.persistence;
 
-import is.gudmundur1.springdatajpademo.core.DomainObject;
+import is.gudmundur1.jdbcdemo.core.DomainObject;
 
 public abstract class AbstractDataMapper<T extends DomainObject> {
 

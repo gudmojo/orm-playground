@@ -1,8 +1,9 @@
 package is.gudmundur1.jdbcdemo.postgres;
 
-import is.gudmundur1.springdatajpademo.core.Department;
-import is.gudmundur1.springdatajpademo.core.DepartmentRepo;
-import is.gudmundur1.springdatajpademo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.Department;
+import is.gudmundur1.jdbcdemo.core.DepartmentRepo;
+import is.gudmundur1.jdbcdemo.core.Employee;
+import is.gudmundur1.jdbcdemo.core.persistence.UnitOfWork;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -15,19 +16,15 @@ import java.util.Optional;
 
 public class PostgresDepartmentRepo implements DepartmentRepo {
 
-    private PostgresClient dbClient;
-
-    public PostgresDepartmentRepo(PostgresClient dbClient) {
-        this.dbClient = dbClient;
-    }
-
     @Override
     public Optional<Department> findById(long id, boolean loadChildren) {
         try {
             String sql = "select id, name from departments where id = ?";
             ResultSetHandler<Department> handler = new BeanHandler<>(Department.class);
             QueryRunner queryRunner = new QueryRunner();
-            Connection connection = dbClient.getConnection();
+            PostgresTransactionContext transactionContext =
+                    (PostgresTransactionContext) UnitOfWork.getCurrent().getTransactionContext();
+            Connection connection = transactionContext.getPostgresConnection();
             Department result = queryRunner.query(connection, sql, handler, id);
             if (result == null) {
                 return Optional.empty();
@@ -55,7 +52,10 @@ public class PostgresDepartmentRepo implements DepartmentRepo {
             String sql = "select id, name from departments where name = ?";
             ResultSetHandler<Department> handler = new BeanHandler<>(Department.class);
             QueryRunner queryRunner = new QueryRunner();
-            Department result = queryRunner.query(dbClient.getConnection(), sql, handler, name);
+            PostgresTransactionContext transactionContext =
+                    (PostgresTransactionContext) UnitOfWork.getCurrent().getTransactionContext();
+            Connection connection = transactionContext.getPostgresConnection();
+            Department result = queryRunner.query(connection, sql, handler, name);
             return Optional.ofNullable(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
