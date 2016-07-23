@@ -4,7 +4,6 @@ import is.gudmundur1.springdatajpademo.core.Department;
 import is.gudmundur1.springdatajpademo.core.DepartmentRepository;
 import is.gudmundur1.springdatajpademo.core.Employee;
 import is.gudmundur1.springdatajpademo.core.EmployeeRepository;
-import is.gudmundur1.springdatajpademo.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
