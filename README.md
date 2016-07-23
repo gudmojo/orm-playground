@@ -1,2 +1,6 @@
-# unit-of-work-demo
-A demo implementation of the Unit of Work pattern
+# orm-playground
+Experiments with object relational mapping
+
+- spring-data-jpa-demo
+- hibernate-xml-demo
+- jdbc-demo
