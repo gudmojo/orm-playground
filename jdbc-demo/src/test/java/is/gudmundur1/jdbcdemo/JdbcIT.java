@@ -40,7 +40,7 @@ public class JdbcIT {
         testDriver.cleanUpDepartment(deptId);
 
         testDriver.createDepartment(deptId);
-        Department department = testDriver.getDepartmentRepo().findById(deptId, false).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId, false).orElse(null);
         assertThat(department, is(notNullValue()));
         assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME));
     }
@@ -54,7 +54,7 @@ public class JdbcIT {
         testDriver.createDepartment(deptId);
         testDriver.updateDepartment(deptId);
 
-        Department department = testDriver.getDepartmentRepo().findById(deptId, false).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId, false).orElse(null);
         assertThat(department, is(notNullValue()));
         assertThat(department.getName(), is(TestDriver.SALES_NAME_2));
     }
@@ -68,7 +68,7 @@ public class JdbcIT {
         testDriver.createDepartment(deptId);
         testDriver.deleteDepartment(deptId);
 
-        Department department = testDriver.getDepartmentRepo().findById(deptId, false).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId, false).orElse(null);
         assertThat(department, is(nullValue()));
     }
 
@@ -81,7 +81,7 @@ public class JdbcIT {
         testDriver.cleanUpDepartment(deptId);
 
         testDriver.createDepartmentWithEmployees(deptId, 1L, 2L);
-        Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId, true).orElse(null);
         assertThat(department, is(notNullValue()));
         assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME));
         List<Employee> employeeList = department.getEmployeeList();
@@ -92,8 +92,8 @@ public class JdbcIT {
         assertThat(bonnie.getName(), is("Bonnie"));
         assertThat(bonnie.getDepartmentId(), is(deptId));
         Employee clyde = employeeList.stream()
-                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-        assertThat(clyde.getName(), is("Bonnie"));
+                .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartmentId(), is(deptId));
     }
 
@@ -113,7 +113,7 @@ public class JdbcIT {
         } catch (Exception ignored) {
             UnitOfWork.getCurrent().getTransactionContext().close();
         }
-        Department department = testDriver.getDepartmentRepo().findById(deptId1, false).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId1, false).orElse(null);
         assertThat(department, is(nullValue()));
     }
 
@@ -126,7 +126,7 @@ public class JdbcIT {
         testDriver.cleanUpDepartment(deptId);
 
         testDriver.createDepartmentWithEmployees(deptId, 3L, 4L);
-        Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
+        Department department = testDriver.findDepartmentById(deptId, true).orElse(null);
         List<Employee> employeeList = department.getEmployeeList();
         System.out.println("begin");
         UnitOfWork.newCurrent();
@@ -134,6 +134,7 @@ public class JdbcIT {
                 .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
         bonnie.setName("Bonnie2");
         UnitOfWork.getCurrent().commit();
+        employeeList = testDriver.findDepartmentById(deptId, true).orElse(null).getEmployeeList();
         assertThat(employeeList, is(notNullValue()));
         assertThat(employeeList.size(), is(2));
         Employee bonnie2 = employeeList.stream()
@@ -144,7 +145,6 @@ public class JdbcIT {
                 .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
         assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartmentId(), is(deptId));
-        UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
     @Test
@@ -156,8 +156,7 @@ public class JdbcIT {
             testDriver.cleanUpDepartment(deptId);
 
             testDriver.createDepartmentWithEmployees(deptId, 1L, 2L);
-            UnitOfWork.newCurrent();
-            Department department = testDriver.getDepartmentRepo().findById(deptId, true).orElse(null);
+            Department department = testDriver.findDepartmentById(deptId, true).orElse(null);
             assertThat(department, is(notNullValue()));
             assertThat(department.getName(), CoreMatchers.is(TestDriver.SALES_NAME));
             List<Employee> employeeList = department.getEmployeeList();
@@ -168,10 +167,9 @@ public class JdbcIT {
             assertThat(bonnie.getName(), is("Bonnie"));
             assertThat(bonnie.getDepartmentId(), is(deptId));
             Employee clyde = employeeList.stream()
-                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-            assertThat(clyde.getName(), is("Bonnie"));
+                    .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+            assertThat(clyde.getName(), is("Clyde"));
             assertThat(clyde.getDepartmentId(), is(deptId));
-            UnitOfWork.getCurrent().getTransactionContext().close();
         }
     }
 }

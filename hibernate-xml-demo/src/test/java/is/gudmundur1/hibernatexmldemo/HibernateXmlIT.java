@@ -92,8 +92,8 @@ public class HibernateXmlIT {
         assertThat(bonnie.getName(), is("Bonnie"));
         assertThat(bonnie.getDepartmentId(), is(deptId));
         Employee clyde = employeeList.stream()
-                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-        assertThat(clyde.getName(), is("Bonnie"));
+                .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartmentId(), is(deptId));
     }
 

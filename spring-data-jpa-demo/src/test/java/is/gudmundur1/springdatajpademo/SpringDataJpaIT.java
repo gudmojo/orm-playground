@@ -101,8 +101,8 @@ public class SpringDataJpaIT {
         assertThat(bonnie.getName(), is("Bonnie"));
         assertThat(bonnie.getDepartment().getId(), is(deptId));
         Employee clyde = employeeList.stream()
-                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-        assertThat(clyde.getName(), is("Bonnie"));
+                .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartment().getId(), is(deptId));
     }
 
@@ -126,8 +126,8 @@ public class SpringDataJpaIT {
         assertThat(bonnie.getName(), is("Bonnie"));
         assertThat(bonnie.getDepartment().getId(), is(deptId));
         Employee clyde = employeeList.stream()
-                .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-        assertThat(clyde.getName(), is("Bonnie"));
+                .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+        assertThat(clyde.getName(), is("Clyde"));
         assertThat(clyde.getDepartment().getId(), is(deptId));
     }
 
@@ -196,8 +196,8 @@ public class SpringDataJpaIT {
             assertThat(bonnie.getName(), is("Bonnie"));
             assertThat(bonnie.getDepartment().getId(), is(deptId));
             Employee clyde = employeeList.stream()
-                    .filter(employee -> "Bonnie".equals(employee.getName())).findFirst().get();
-            assertThat(clyde.getName(), is("Bonnie"));
+                    .filter(employee -> "Clyde".equals(employee.getName())).findFirst().get();
+            assertThat(clyde.getName(), is("Clyde"));
             assertThat(clyde.getDepartment().getId(), is(deptId));
         }
 

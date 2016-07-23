@@ -81,7 +81,10 @@ public class TestDriver {
         UnitOfWork.getCurrent().getTransactionContext().close();
     }
 
-    public DepartmentRepo getDepartmentRepo() {
-        return departmentRepo;
+    public Optional<Department> findDepartmentById(long deptId, boolean deep) {
+        UnitOfWork.newCurrent();
+        Optional<Department> department = departmentRepo.findById(deptId, deep);
+        UnitOfWork.getCurrent().getTransactionContext().close();
+        return department;
     }
 }
